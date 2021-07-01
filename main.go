@@ -7,14 +7,8 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"regexp"
 )
-
-var dict = map[int]string{
-	int('T'): "🀀",
-	int('N'): "🀁",
-	int('S'): "🀂",
-	int('P'): "🀃",
-}
 
 func init() {
 	flag.Parse()
@@ -51,11 +45,56 @@ func run() error {
 	if err != nil {
 		return err
 	}
-	// fmt.Print(string(t))
 
-	for _, char := range string(t) {
-		fmt.Print(dict[int(char)])
+	rep := regexp.MustCompile("[1-9]+[mps]|[TNSPWGR]")
+	raw_string := rep.FindAllStringSubmatch(string(t), -1)
+	fmt.Println(string(t))
+	var all_tiles string
+	for _, str := range raw_string {
+		tiles := convertToTiles(str[0])
+		all_tiles += tiles
 	}
+	fmt.Println(all_tiles)
 
 	return nil
+}
+
+func convertToTiles(str string) string {
+	var ret string
+	lastChar := str[len(str)-1]
+	switch lastChar {
+	case 'm':
+		for _, c := range str[:len(str)-1] {
+			rune := ('🀇' + c - 49)
+			ret += string(rune)
+		}
+		return ret
+	case 'p':
+		for _, c := range str[:len(str)-1] {
+			rune := ('🀙' + c - 49)
+			ret += string(rune)
+		}
+		return ret
+	case 's':
+		for _, c := range str[:len(str)-1] {
+			rune := ('🀐' + c - 49)
+			ret += string(rune)
+		}
+		return ret
+	case 'T':
+		return "🀀"
+	case 'N':
+		return "🀁"
+	case 'S':
+		return "🀂"
+	case 'P':
+		return "🀃"
+	case 'W':
+		return "🀆"
+	case 'G':
+		return "🀅"
+	case 'R':
+		return "🀄"
+	}
+	return "a"
 }
