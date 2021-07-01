@@ -8,6 +8,7 @@ import (
 	"log"
 	"os"
 	"regexp"
+	"strings"
 )
 
 func init() {
@@ -31,8 +32,14 @@ func run() error {
 
 	var r io.Reader
 	switch filename {
-	case "", "-":
+	case "":
 		r = os.Stdin
+	case "-":
+		if args := flag.Args(); len(args) > 1 {
+			r = strings.NewReader(args[1])
+		} else {
+			r = os.Stdin
+		}
 	default:
 		f, err := os.Open(filename)
 		if err != nil {
