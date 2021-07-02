@@ -55,7 +55,7 @@ func run() error {
 
 	rep := regexp.MustCompile("[1-9]+[mps]|[TNSPWGR]")
 	raw_string := rep.FindAllStringSubmatch(string(t), -1)
-	fmt.Println(string(t))
+	// fmt.Println(string(t))
 	var all_tiles string
 	for _, str := range raw_string {
 		tiles := convertToTiles(str[0])
